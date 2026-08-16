@@ -3,13 +3,11 @@ package com.reporting.app;
 import com.reporting.app.Controller.ReportController;
 import com.reporting.app.Entity.ReportEntity;
 import com.reporting.app.Service.ReportService;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,7 +17,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
-public class TestController {
+public class TestController { // Renamed
 
     @Mock
     private ReportService service;
@@ -35,14 +33,13 @@ public class TestController {
     void getReports() {
         ReportEntity en = new ReportEntity(1, "jane.doe@example.com", "Jane", "Doe", "SecurePassword123!", "+1-555-0198", "Software engineer with five years of experience.", "submitted");
         ReportEntity en1 = new ReportEntity(2, "marcus.vance@example.com", "Marcus", "Vance", "CryptoKey987##", "+1-555-0741", "Senior Database Administrator specializing in PostgreSQL performance tuning and cloud migrations.", "not_submitted");
-
         List<ReportEntity> mockList = Arrays.asList(en, en1);
+
         when(service.getDetails()).thenReturn(mockList);
 
         List<ReportEntity> response = reportController.getDetails();
 
         assertNotNull(response);
-        // Fixed: added index 0 to get() and fixed the phone number mismatch
         assertEquals(1, response.get(0).getId());
         assertEquals("Jane", response.get(0).getFirstName());
         assertEquals("Doe", response.get(0).getLastName());
@@ -51,7 +48,6 @@ public class TestController {
         assertEquals("+1-555-0198", response.get(0).getPhone());
         assertEquals("Software engineer with five years of experience.", response.get(0).getDescription());
         assertEquals("submitted", response.get(0).getStatus());
-
         verify(service).getDetails();
     }
 
@@ -61,7 +57,6 @@ public class TestController {
         ReportEntity databaseOutput = new ReportEntity(1, "jane.doe@example.com", "Jane", "Doe", "SecurePassword123!", "+1-555-0198", "Software engineer with five years of experience.", "submitted");
 
         when(service.setDetails(any(ReportEntity.class))).thenReturn(databaseOutput);
-
 
         ReportEntity response = reportController.setDetails(rawInput);
 
@@ -76,7 +71,6 @@ public class TestController {
                 () -> assertEquals("Software engineer with five years of experience.", response.getDescription()),
                 () -> assertEquals("submitted", response.getStatus())
         );
-
         verify(service).setDetails(rawInput);
     }
 }
