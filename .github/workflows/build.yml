@@ -22,5 +22,5 @@ jobs:
       - name: Run Tests and Build JAR
         run: mvn clean package
 
-      - name: Build Docker Image
+      - name: Build Docker image
         run: docker build -t my-report-app:latest .
