@@ -13,7 +13,7 @@ public class ReportService {
    @Autowired
    ReportRepository repository;
    public ReportService(ReportRepository repository){
-
+       this.repository = repository;
    }
 
     public List<ReportEntity> getDetails(){
