@@ -1,30 +1,29 @@
-
-  version: '3.8'
-
-  services:
-
-    postgres-db:
-      image: postgres:16-alpine
-      container_name: postgres_employee_container
-      environment:
-        POSTGRES_USER: bindhup
-        POSTGRES_PASSWORD: Krishna@26
-        POSTGRES_DB: postgres
-      ports:
-        - "5432:5432"
-      volumes:
-        - pgdata:/var/lib/postgresql/data
+#services:
+ # postgres-db:
+  #  image: postgres:16-alpine
+   # container_name: postgres_report_container
+    #environment:
+     # POSTGRES_USER: bindhup
+      #POSTGRES_PASSWORD: Krishna@26
+      #POSTGRES_DB: postgres-db
+    #volumes:
+     # - pgdata:/var/lib/postgresql/data
 
 
-    app-service:
-      build: .
-      container_name: spring_crud_container
-      ports:
-        - "8080:8080"
-      depends_on:
-        - postgres-db
-      environment:
-        SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/postgres
-        SPRING_DATASOURCE_USERNAME: bindhup
-        SPRING_DATASOURCE_PASSWORD: Krishna@26
+  #app-service:
+   # build:
+    #  context: .
+     # dockerfile: Dockerfile
+    #container_name: spring_report_container
+    #ports:
+     # - "8080:8080"
+    #depends_on:
+    #  postgres-db:
+     #   condition: service_healthy
+    #environment:
+     # SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/postgres-db
+      #SPRING_DATASOURCE_USERNAME: bindhup
+      #SPRING_DATASOURCE_PASSWORD: Krishna@26
 
+#volumes:
+ # pgdata:

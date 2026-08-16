@@ -38,7 +38,7 @@ public class TestService {
         List<ReportEntity> response = service.getDetails();
 
         assertNotNull(response);
-        assertEquals(1,response.get().getId());
+        assertEquals(1,response.get(0));
         assertEquals("Jane", response.get(0).getFirstName());
         assertEquals("Doe", response.get(0).getLastName());
         assertEquals("jane.doe@example.com", response.get(0).getEmail());
