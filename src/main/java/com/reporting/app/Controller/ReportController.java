@@ -13,7 +13,7 @@ public class ReportController {
     @Autowired
      private ReportService service;
      public ReportController(ReportService service){
-
+         this.service = service;
      }
      @GetMapping("/reports")
      public List<ReportEntity> getDetails(){
