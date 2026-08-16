@@ -24,3 +24,8 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t my-report-app:latest .
+      - name: Tag image for registry
+        run: docker tag my-report-app:latest bindhup/my-report-app:latest
+
+      - name: Push Docker image
+        run: docker push bindhup/my-report-app:latest
