@@ -3,7 +3,7 @@ name: Terraform CD
 on:
   workflow_run:
     workflows:
-      - Build and Push Docker Image
+      - Report App pipeline
     types:
       - completed
     branches:
