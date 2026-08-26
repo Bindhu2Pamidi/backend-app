@@ -105,7 +105,7 @@ resource "aws_ecs_cluster" "app" {
 resource "aws_ecs_task_definition" "app" {
   family                   = local.name
   requires_compatibilities = ["FARGATE"]
-  network_mode             = "aws_vpc"
+  network_mode             = "awsvpc"
   cpu                      = "256"
   memory                   = "512"
 

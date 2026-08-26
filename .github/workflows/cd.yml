@@ -50,6 +50,7 @@ jobs:
 
       - name: Terraform validate
         run: terraform validate
+
       - name: Terraform plan
         run: terraform plan
         env:
