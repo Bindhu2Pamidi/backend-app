@@ -30,7 +30,12 @@ resource "aws_security_group" "alb"{
         protocol = "tcp"
         cidr_blocks = ["0.0.0.0/0"]
     }
-    egress = []
+    egress{
+        from_port = 0
+        to_port = 0
+        protocol = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
 }
 resource "aws_security_group" "ecs"{
     name = "${local.name}-ecs-sg"
@@ -41,7 +46,12 @@ resource "aws_security_group" "ecs"{
         protocol = "tcp"
         security_groups = [aws_security_group.alb.id]
     }
-    egress = []
+    egress{
+        from_port = 0
+        to_port = 0
+        protocol = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
 }
 resource "aws_security_group" "postgres" {
   name   = "${local.name}-postgres-sg"
