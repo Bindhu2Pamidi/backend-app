@@ -1,11 +1,5 @@
 name: Terraform CD
-
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "terraform/**"
   workflow_run:
     workflows: ["Report App pipeline"]
     types:
