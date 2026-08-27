@@ -68,16 +68,12 @@ jobs:
 
       - name: Force ECS deployment
         run: |
+          CLUSTER_NAME=$(terraform output -raw ecs_cluster_name)
+          SERVICE_NAME=$(terraform output -raw ecs_service_name)
           aws ecs update-service \
             --cluster report-app-test-cluster \
             --service report-app-test \
             --force-new-deployment
-
-      - name: Wait for ECS deployment
-        run: |
-          aws ecs wait services-stable \
-            --cluster report-app-test-cluster \
-            --services report-app-test
 
       - name: Print application URL
         run: terraform output application_url
