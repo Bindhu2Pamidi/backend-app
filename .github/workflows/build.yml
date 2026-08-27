@@ -22,11 +22,7 @@ jobs:
 
       - name: Run Tests and Build JAR
         run: mvn clean package
-        #output:
-         # my_value: "${{steps.id.genarete.example file}}"
-         # steps:
-          #    id: generate
-           #   run: echo "${{example file}}" >> $github_output
+
       -  name: Log in to Docker Hub
          uses: docker/login-action@v3
          with:
@@ -34,9 +30,10 @@ jobs:
            password: ${{ secrets.DOCKERHUB_TOKEN}}
 
       - name: Build Docker image
-        run: docker build -t my-report-app:latest .
+        run: docker build -t report-app-docker:latest .
+
       - name: Tag image for registry
-        run: docker tag my-report-app:latest bindhup/report-app:latest
+        run: docker tag report-app-docker:latest bindhup/report-app-testing:latest
 
       - name: Push Docker image
-        run: docker push bindhup/report-app:latest
+        run: docker push bindhup/report-app-testing:latest

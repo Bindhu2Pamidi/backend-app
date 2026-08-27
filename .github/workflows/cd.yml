@@ -7,13 +7,11 @@ on:
     paths:
       - "terraform/**"
   workflow_run:
-    workflows:
-      - Report App pipeline
+    workflows: ["Report App pipeline"]
     types:
       - completed
     branches:
       - main
-
   workflow_dispatch:
 
 permissions:
@@ -23,12 +21,20 @@ env:
   AWS_REGION: us-east-1
 
 jobs:
-  deploy:
-    if: >
-      github.event_name == 'workflow_dispatch' ||
-      github.event.workflow_run.conclusion == 'success'
-
+  terraform-deploy:
     runs-on: ubuntu-latest
+
+
+    if: >
+      github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' ||
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'push' && !contains(github.event.head_commit.modified, 'app/'))
+
+    container:
+      image: docker.io/your-dockerhub-username/your-image-name:latest
+      credentials:
+        username: bindhup
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     defaults:
       run:
@@ -38,7 +44,7 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.workflow_run.head_sha || github.sha}}
+          ref: ${{ github.sha }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -46,9 +52,16 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+      - name: Ensure S3 Backend Bucket Exists
+        run: |
+            BUCKET_NAME="report-s3-bucket"
+            if ! aws s3api head-bucket --bucket "$BUCKET_NAME" 2>/dev/null; then
+              echo "Bucket $BUCKET_NAME does not exist. Creating it now..."
+              aws s3api create-bucket --bucket "$BUCKET_NAME" --region ${{ env.AWS_REGION }}
+              aws s3api put-bucket-versioning --bucket "$BUCKET_NAME" --versioning-configuration Status=Enabled
+            else
+              echo "Bucket $BUCKET_NAME already exists. Skipping creation."
+            fi
 
       - name: Terraform init
         run: terraform init
@@ -56,20 +69,17 @@ jobs:
       - name: Terraform validate
         run: terraform validate
 
+
       - name: Terraform plan
-        run: terraform plan
+        run: terraform plan -out=tfplan
         env:
           TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
 
       - name: Terraform apply
-        run: terraform apply -auto-approve
-        env:
-          TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
+        run: terraform apply -auto-approve tfplan
 
       - name: Force ECS deployment
         run: |
-          CLUSTER_NAME=$(terraform output -raw ecs_cluster_name)
-          SERVICE_NAME=$(terraform output -raw ecs_service_name)
           aws ecs update-service \
             --cluster report-app-test-cluster \
             --service report-app-test \
