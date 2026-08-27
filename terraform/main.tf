@@ -1,11 +1,4 @@
 terraform{
-    cloud {
-        organization = "my-terraform-org"
-
-        workspaces {
-          name = "report-app-sandbox"
-        }
-      }
     required_providers{
         aws={
             source = "hashicorp/aws"
