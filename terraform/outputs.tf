@@ -3,5 +3,5 @@ output "database_endpoint" {
 }
 
 output "application_url" {
-  value       = "https://amazon.com{aws_ecs_cluster.app.name}/tasks?region=us-east-1"
+   value = "https://console.aws.amazon.com/ecs/v2/clusters/${aws_ecs_cluster.app.name}/tasks?region=us-east-1"
 }
