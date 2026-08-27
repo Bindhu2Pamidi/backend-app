@@ -5,7 +5,7 @@ variable "aws_region" {
 
 variable "docker_image" {
   type    = string
-  default = "bindhup/report-app:test"
+  default = "bindhup/report-app-testing:latest"
 }
 
 variable "db_name" {

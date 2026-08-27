@@ -1,13 +1,12 @@
 name: Terraform CD
 on:
   workflow_run:
-    workflows: ["Report App pipeline"]
+    workflows: "Report App pipeline"
     types:
       - completed
     branches:
       - main
   workflow_dispatch:
-
 
 env:
   AWS_REGION: us-east-1
@@ -15,12 +14,6 @@ env:
 jobs:
   terraform-deploy:
     runs-on: ubuntu-latest
-
-    container:
-      image: docker.io/bindhup/report-app-testing:latest
-      credentials:
-        username: bindhup
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     defaults:
       run:
@@ -53,6 +46,7 @@ jobs:
         run: terraform plan -out=tfplan
         env:
           TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
+          TF_VAR_docker_image: bindhup/report-app-testing:latest
 
       - name: Terraform apply
         run: terraform apply -auto-approve tfplan
@@ -60,8 +54,8 @@ jobs:
       - name: Force ECS deployment
         run: |
           aws ecs update-service \
-            --cluster report-app-test-cluster \
-            --service report-app-test \
+            --cluster reports-app-test-cluster \
+            --service reports-app-test \
             --force-new-deployment
 
       - name: Print application URL
