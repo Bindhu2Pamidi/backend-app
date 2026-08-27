@@ -58,5 +58,5 @@ jobs:
             --service reports-app-test \
             --force-new-deployment
 
-      - name: Print application URL
+      - name: Print application Url
         run: terraform output application_url
