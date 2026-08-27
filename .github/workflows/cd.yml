@@ -28,7 +28,7 @@ jobs:
       (github.event_name == 'push' && !contains(github.event.head_commit.modified, 'app/'))
 
     container:
-      image: docker.io/your-dockerhub-username/your-image-name:latest
+      image: docker.io/bindhup/report-app-testing:latest
       credentials:
         username: bindhup
         password: ${{ secrets.DOCKERHUB_TOKEN }}
