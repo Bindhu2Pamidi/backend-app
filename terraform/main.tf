@@ -6,8 +6,8 @@ terraform {
     }
   }
    backend "s3" {
-      bucket         = "report-s3-bucket"
-      key            = "dev/terraform.tfstate"
+      bucket         = "report-bucket-s3-test"
+      key            = "global/s3/terraform.tfstate"
       region         = "us-east-1"
       encrypt        = true
     }
